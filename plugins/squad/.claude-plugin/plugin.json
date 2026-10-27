@@ -1,0 +1,8 @@
+{
+  "name": "squad",
+  "version": "0.4.0",
+  "description": "Squad de seis agentes por complexidade (Executor, Analyst, Developer, Specialist, Reviewer, QA) com a skill orquestrar e perfis gerados para o OpenCode.",
+  "author": {
+    "name": "Gustavo Scarpini"
+  }
+}

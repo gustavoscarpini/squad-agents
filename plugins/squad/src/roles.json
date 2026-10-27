@@ -1,0 +1,50 @@
+{
+  "Executor": {
+    "description": "Executa instruções totalmente especificadas — edições de arquivo, comandos, escritas via ferramenta/MCP/API — sem decisões próprias. Use quando a mudança, o valor ou a ação já está decidida até o último detalhe. NÃO decide o que fazer, só como aplicar; para em qualquer ambiguidade em vez de chutar.",
+    "claude": { "model": "haiku" },
+    "opencode": {
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "permission": { "subagent": "deny" }
+    }
+  },
+  "Analyst": {
+    "description": "Investigação somente leitura de qualquer fonte — código, web, docs, sistemas via MCP, dados, GitLab. Use para \"onde fica\", \"o que X diz\", \"como Y funciona\", \"descubra Z\", inclusive checar se algo existe. NÃO edita, não escreve, não decide; devolve conclusões com fonte, nunca despejo de material bruto.",
+    "claude": { "model": "sonnet", "effort": "medium", "disallowedTools": "Edit, Write, NotebookEdit" },
+    "opencode": {
+      "model": "openai/gpt-6-sol",
+      "permission": { "edit": "deny", "subagent": "deny" }
+    }
+  },
+  "Developer": {
+    "description": "Constrói com julgamento dentro de um escopo dado — código, docs ou qualquer entregável. Use para \"implemente\", \"corrija\", \"escreva\", \"conecte\", qualquer coisa que exija uma decisão de design ou redação dentro de uma tarefa delimitada. NÃO assume trabalho transversal ou sem precedente; escala isso para o Specialist em vez de chutar. Não é para mudanças já decididas até o detalhe — isso é Executor.",
+    "claude": { "model": "sonnet", "effort": "medium" },
+    "opencode": {
+      "model": "openai/gpt-6-sol",
+      "permission": {}
+    }
+  },
+  "Specialist": {
+    "description": "Resolve trabalho transversal, sem padrão existente ou com risco real de correção (migration, financeiro, auth, concorrência, agenda/encaixe, produção) — investiga causa raiz e raio de impacto, compara opções, consulta o Reviewer antes de construir e implementa a parte crítica. Use para o que o Developer escalou ou para o que a sessão principal já sabe ser estruturalmente difícil. NÃO é iniciado por outro agente e pode reformular a pergunta em vez de respondê-la como veio.",
+    "claude": { "model": "opus", "effort": "high" },
+    "opencode": {
+      "model": "openai/gpt-6-astra",
+      "permission": {}
+    }
+  },
+  "Reviewer": {
+    "description": "Valida ou contesta um plano, diff, texto ou decisão em qualquer domínio — lê o artefato real, nunca uma descrição dele. Use para \"faz sentido?\", \"revise isso\", \"o que acha\", review de task e review final de branch, antes de se comprometer com algo difícil de desfazer. NÃO decide nem edita; separa o que bloqueia do que é sugestão e abre com um veredito.",
+    "claude": { "model": "opus", "effort": "high", "disallowedTools": "Edit, Write, NotebookEdit" },
+    "opencode": {
+      "model": "openai/gpt-6-astra",
+      "permission": { "edit": "deny" }
+    }
+  },
+  "QA": {
+    "description": "Verifica um resultado rodando de verdade — suíte de testes, build, lint, fluxo ponta a ponta no browser (Playwright) — em ambiente isolado, e só reporta. Use depois de uma implementação, quando \"passou?\" precisa de evidência executada e não de leitura de código. NÃO corrige nada, não commita, nunca toca produção nem banco compartilhado; bug encontrado volta como relato reproduzível.",
+    "claude": { "model": "sonnet", "effort": "medium", "disallowedTools": "Edit, Write, NotebookEdit" },
+    "opencode": {
+      "model": "openai/gpt-6-sol",
+      "permission": { "edit": "deny", "subagent": "deny" }
+    }
+  }
+}

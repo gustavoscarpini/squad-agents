@@ -1,0 +1,17 @@
+{
+  "name": "squad",
+  "owner": {
+    "name": "Gustavo Scarpini"
+  },
+  "metadata": {
+    "description": "Squad de agentes por complexidade para Claude Code e OpenCode, baseada no aiwkf.",
+    "version": "0.4.0"
+  },
+  "plugins": [
+    {
+      "name": "squad",
+      "source": "./plugins/squad",
+      "description": "Seis agentes (Executor, Analyst, Developer, Specialist, Reviewer, QA) e a skill orquestrar."
+    }
+  ]
+}
