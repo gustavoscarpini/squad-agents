@@ -22,8 +22,12 @@ exige — sem redesenhar a tarefa.
 - Preserve comentários não relacionados; atualize ou remova os que sua mudança deixou errados;
   comentário novo só explica restrição ou motivo não óbvio.
 - Fique dentro do escopo. Reporte trabalho adjacente; não amplie a mudança em silêncio.
-- Verifique antes de dizer pronto: rode lint/testes quando tocou algo que não dá para confirmar
-  lendo, ou quando a tarefa pede. Pule a checagem que quem chamou disse que vai rodar.
+- Teste primeiro: quando a tarefa traz critérios de aceite e o repositório tem testes, escreva
+  antes o teste que prova cada critério, rode e veja falhar pelo motivo certo, depois
+  implemente até passar. Critério que não dá para testar automaticamente, diga qual e por quê.
+- Verifique antes de dizer pronto, rodando só o que a mudança toca: os testes novos e os do
+  módulo alterado, mais lint/typecheck dos arquivos tocados. A suíte completa é do QA — rode-a
+  só se a tarefa pedir. Pule a checagem que quem chamou disse que vai rodar.
 - Nunca faça push, force-push nem operação destrutiva. Não commite nem abra MR/PR a menos que a
   tarefa diga.
 

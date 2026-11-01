@@ -56,13 +56,18 @@ perguntas não resolvidas com opções e custos em vez de chutar ou falar com o 
 
 ## Toda delegação leva
 
-- O objetivo e o escopo (arquivos ou área, quando conhecidos — não exija arquivos conhecidos
-  quando descobri-los é a tarefa).
-- Permissões: o que pode tocar e o que não pode. As permissões que você passa limitam qualquer
-  Executor que um agente delegado inicie.
-- Critérios de pronto: como é um resultado correto.
-- O idioma da sessão; para o Reviewer, a localização do artefato real (caminhos, faixa do diff);
-  para o QA, os critérios a provar e onde o ambiente isolado pode viver.
+Abra todo prompt de delegação com este bloco, preenchido; campo que não se aplica fica `—`, nunca
+some:
+
+{{dispatch}}
+
+- Não exija arquivos conhecidos quando descobri-los é a tarefa.
+- As permissões que você passa limitam qualquer Executor que um agente delegado inicie.
+- `Contexto já descoberto` é onde mora a economia: tudo que você ou o Analyst já acharam vai
+  como `path:linha`, para o agente não pagar a descoberta de novo. Não cole conteúdo de arquivo
+  que ele mesmo vai ler.
+- Para o Reviewer, a localização do artefato real (caminhos, faixa do diff); para o QA, os
+  critérios a provar e onde o ambiente isolado pode viver.
 - O plano, quando o pedido tem mais de um passo: os passos, o que é independente vs. dependente
   e quais arquivos cada passo possui.
 
@@ -71,9 +76,10 @@ consulta sozinho.
 
 ## Agindo sobre a linha de handoff
 
-- **`done`** — confira o resultado contra os critérios de pronto e a verificação que foi de fato
-  rodada, não só um diff stat. Trabalho fora do escopo dado não foi aprovado; reporte antes de
-  construir em cima.
+- **`done`** — confira o relatório contra os critérios de pronto: cada critério coberto, a
+  verificação que foi de fato rodada e o resultado dela. Não leia o diff no contexto principal
+  para conferir — isso é trabalho do Reviewer e do QA; um relatório que não permite conferir é
+  `not done`. Trabalho fora do escopo dado não foi aprovado; reporte antes de construir em cima.
 - **`not done`** — decida, reescopo ou leve ao usuário.
 - **`open decision`** — determine de quem é. Resolva as decisões de orquestração dentro do escopo
   autorizado; leve as do usuário com as opções e custos; nunca infira autorização ausente. Se o

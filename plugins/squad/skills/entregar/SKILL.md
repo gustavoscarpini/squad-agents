@@ -77,8 +77,9 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
 6. **Plano de execução.** Escreva `.specs/features/<slug>/entrega.md` com:
    - `## Restrições globais`: arquivos permitidos, textos exatos, proibições do repo, comandos de
      teste/build/lint.
-   - `## Task N: <nome>`: ACs cobertos, arquivos que a task possui, dependências, zona de risco
-     (sim/não), papel da tabela. ACs no mesmo componente ficam na mesma task; tasks paralelas
+   - `## Task N: <nome>`: ACs cobertos, o teste que prova cada AC (arquivo e nome do caso a
+     criar, ou "manual: <motivo>"), arquivos que a task possui (inclusive os de teste),
+     dependências, zona de risco (sim/não), papel da tabela. ACs no mesmo componente ficam na mesma task; tasks paralelas
      nunca possuem o mesmo arquivo.
    - Mudou UI? Última task = verificação ponta a ponta pelo `squad:QA`.
    - `## Rulings`: decisões de orquestração tomadas sem o usuário, uma por linha, com o motivo.
@@ -86,8 +87,10 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
    Resolva ambiguidades verificáveis (campo do DTO, formato de helper) no próprio plano antes do
    dispatch, via `squad:Analyst` se exigir descoberta.
 7. **Executar.** Para cada task, na ordem das dependências:
-   1. Dispatch ao papel da tabela com: objetivo, ACs, arquivos que possui, Restrições globais,
-      branch, "commit ao terminar com Conventional Commits, só com a mensagem — sem trailer
+   1. Dispatch ao papel da tabela com o bloco de dispatch do `squad:orquestrar` preenchido:
+      objetivo, ACs com o teste de cada um ("teste primeiro, veja falhar, implemente"), arquivos
+      que possui, Restrições globais, o que já foi descoberto (`path:linha`), branch, "rode só
+      os testes que a task toca; a suíte completa é do QA", "commit ao terminar com Conventional Commits, só com a mensagem — sem trailer
       `Co-Authored-By` nem linha de atribuição", "não commitar fora dos arquivos da task".
    2. **Paralelo só com worktree.** Duas tasks escrevendo no mesmo working tree disputam o
       índice do git (`index.lock`, `git add` levando arquivo da outra) mesmo sem arquivo em
@@ -126,6 +129,9 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
 | `model: opus` num papel que já é opus, ou `sonnet` esquecido no task review comum | Siga a coluna `model` da tabela |
 | Implementar direto do corpo da issue sem trazer para `.specs/` | Passo 2 sempre; a spec fica versionada com o código |
 | Inventar ACs quando a spec não tem critério verificável | Pare e diga o que falta |
+| AC sem teste que o prove | Teste por AC no plano; o Reviewer bloqueia o que faltar |
+| Implementer rodando a suíte completa a cada task | Testes focados na task; suíte completa só no QA |
+| Orquestrador lendo o diff para conferir `done` | Confere o relatório; o diff é do Reviewer |
 | Duas tasks paralelas no mesmo arquivo | Junte na mesma task ou sequencie |
 | Tasks paralelas commitando no mesmo working tree | `isolation: "worktree"` por task + cherry-pick |
 | Task review em toda task | Só zona de risco ou diff > ~150 linhas; o resto fica para o review final |

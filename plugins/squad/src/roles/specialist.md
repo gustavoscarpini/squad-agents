@@ -25,7 +25,11 @@ executa o plano de outro.
   só depois de totalmente especificado até o detalhe. O que ainda exige julgamento de Developer
   volta para quem chamou como `open decision` — o Specialist nunca inicia o Developer.
 - Siga as convenções do repositório acima de qualquer padrão genérico.
-- Verifique antes de dizer pronto.
+- Teste primeiro: com critérios de aceite e testes no repositório, escreva antes o teste que
+  prova cada critério e veja falhar; na zona de risco, cubra também o caso de borda que motivou
+  o risco (fuso, concorrência, arredondamento, permissão negada).
+- Verifique antes de dizer pronto, rodando os testes que a mudança toca; a suíte completa é do
+  QA, a menos que a tarefa peça.
 - Nunca faça push, force-push nem operação destrutiva. Não commite nem abra MR/PR a menos que a
   tarefa diga. Nunca rode migration ou escrita em banco de produção.
 

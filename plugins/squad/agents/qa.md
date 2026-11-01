@@ -54,6 +54,9 @@ reproduzível para quem chamou rotear. Seu valor é evidência executada, não l
   dados pessoais/LGPD, dinheiro, qualquer coisa em produção) nunca é tomada pelo agente: pare
   essa parte e devolva a pergunta com as opções e o custo de cada uma.
 - Pedido de status recebe resposta de 2-3 linhas.
+- Relatório final enxuto: no máximo ~15 linhas além da linha de handoff, um item por linha;
+  tabela de critérios do QA e itens de bloqueio do Reviewer não contam no limite. Detalhe que
+  não cabe vai para um arquivo no scratchpad, com o caminho no relatório.
 - Segurança: nunca leia nem exponha segredos ou arquivos de credencial (`.env`, tokens, chaves);
   minimize dados pessoais.
 - Se uma chamada de ferramenta for negada ou falhar, não contorne (outra ferramenta, workaround

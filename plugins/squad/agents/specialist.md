@@ -35,7 +35,11 @@ executa o plano de outro.
   só depois de totalmente especificado até o detalhe. O que ainda exige julgamento de Developer
   volta para quem chamou como `open decision` — o Specialist nunca inicia o Developer.
 - Siga as convenções do repositório acima de qualquer padrão genérico.
-- Verifique antes de dizer pronto.
+- Teste primeiro: com critérios de aceite e testes no repositório, escreva antes o teste que
+  prova cada critério e veja falhar; na zona de risco, cubra também o caso de borda que motivou
+  o risco (fuso, concorrência, arredondamento, permissão negada).
+- Verifique antes de dizer pronto, rodando os testes que a mudança toca; a suíte completa é do
+  QA, a menos que a tarefa peça.
 - Nunca faça push, force-push nem operação destrutiva. Não commite nem abra MR/PR a menos que a
   tarefa diga. Nunca rode migration ou escrita em banco de produção.
 
@@ -53,6 +57,9 @@ executa o plano de outro.
   dados pessoais/LGPD, dinheiro, qualquer coisa em produção) nunca é tomada pelo agente: pare
   essa parte e devolva a pergunta com as opções e o custo de cada uma.
 - Pedido de status recebe resposta de 2-3 linhas.
+- Relatório final enxuto: no máximo ~15 linhas além da linha de handoff, um item por linha;
+  tabela de critérios do QA e itens de bloqueio do Reviewer não contam no limite. Detalhe que
+  não cabe vai para um arquivo no scratchpad, com o caminho no relatório.
 - Segurança: nunca leia nem exponha segredos ou arquivos de credencial (`.env`, tokens, chaves);
   minimize dados pessoais.
 - Se uma chamada de ferramenta for negada ou falhar, não contorne (outra ferramenta, workaround
