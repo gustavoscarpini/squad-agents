@@ -112,8 +112,8 @@ sempre passar pela squad, adicione ao `~/.claude/CLAUDE.md`:
 ## Delegação
 
 A sessão orquestra: decide, sequencia e conversa comigo; os subagentes fazem o trabalho.
-Antes de qualquer busca, mudança, pesquisa, review ou escrita externa (MCP/API), carregue a
-skill `squad:orquestrar`; ela decide se e para quem delegar.
+Antes de qualquer investigação, mudança, pesquisa, review ou escrita externa (MCP/API), carregue
+a skill `squad:orquestrar`; ela decide se e para quem delegar.
 ```
 
 ## Limites

@@ -22,16 +22,22 @@ O modelo vem do papel. Só passe `model` onde a tabela manda rebaixar.
 | Implementer de task numa zona de risco (encaixe/overlap, financeiro, migration, auth, concorrência) **sem padrão existente no repo** | `squad:Specialist` | (do papel: opus) |
 | Implementer quando a spec já traz o código completo; fix de um arquivo só já decidido | `squad:Executor` | (do papel: haiku) |
 | Escrita externa já decidida (comentário na issue, label, arquivo de verificação) | `squad:Executor` | (do papel: haiku) |
-| Fix rounds 1–3 | mesmo implementer (resume) | — |
+| Fix rounds 1–2 | mesmo implementer (resume) | — |
 | Verificação dos critérios: suíte, checks, browser ponta a ponta | `squad:QA` | (do papel: sonnet) |
-| Task review | `squad:Reviewer` | `sonnet` |
+| Task review (só quando obrigatório, ver abaixo) | `squad:Reviewer` | `sonnet` |
 | Task review de task que toca zona de risco | `squad:Reviewer` | (do papel: opus) |
 | Re-review de fix | `squad:Reviewer` | `sonnet` |
 | Review final da branch | `squad:Reviewer` | (do papel: opus) |
-| Fix rounds 4–5 (escalada) | `squad:Specialist` | (do papel: opus) |
+| Fix round 3 (escalada) | `squad:Specialist` | (do papel: opus) |
 
-**Uma task de código só:** pule o task review e vá direto ao review final (`squad:Reviewer`,
-opus) sobre a branch; ele é o gate dessa task. Registre o ruling.
+**Task review só quando obrigatório:** a task toca zona de risco, ou o diff do commit dela passa
+de ~150 linhas alteradas (`git show --stat`). As demais não têm task review: o review final
+(`squad:Reviewer`, opus) lê o diff inteiro contra a spec e é o gate delas. Registre no
+`entrega.md` quais tasks pularam o task review.
+
+**Limite de fix rounds:** 2 no implementer; o 3º vai para o `squad:Specialist`. Se ainda não
+passar, pare e leve ao usuário — três rodadas no mesmo ponto quase sempre indicam spec errada ou
+ambígua, não código.
 
 **Contexto do orquestrador:** comandos estreitos (`grep -n` num arquivo, `head`, `sed -n`), nunca
 varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta ampla vai para o
@@ -79,17 +85,23 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
    - `## Estado`: task → `pendente | em andamento | review | ok`, atualizado a cada passo.
    Resolva ambiguidades verificáveis (campo do DTO, formato de helper) no próprio plano antes do
    dispatch, via `squad:Analyst` se exigir descoberta.
-7. **Executar.** Para cada task, na ordem das dependências (independentes em paralelo, num lote
-   só):
+7. **Executar.** Para cada task, na ordem das dependências:
    1. Dispatch ao papel da tabela com: objetivo, ACs, arquivos que possui, Restrições globais,
-      branch, "commit ao terminar com Conventional Commits e o trailer de atribuição da sessão",
-      "não commitar fora dos arquivos da task".
-   2. Aja sobre a linha de handoff conforme `squad:orquestrar` (`escalate` sobe um degrau,
+      branch, "commit ao terminar com Conventional Commits, só com a mensagem — sem trailer
+      `Co-Authored-By` nem linha de atribuição", "não commitar fora dos arquivos da task".
+   2. **Paralelo só com worktree.** Duas tasks escrevendo no mesmo working tree disputam o
+      índice do git (`index.lock`, `git add` levando arquivo da outra) mesmo sem arquivo em
+      comum. Uma task sozinha roda no working tree da branch. Tasks independentes lançadas juntas
+      rodam cada uma com `isolation: "worktree"`, commitando no worktree dela; ao terminar, traga
+      os commits para a branch da feature com `git cherry-pick <sha>` na ordem do plano. Conflito
+      no cherry-pick → `git cherry-pick --abort` e fix round no implementer da task que chegou
+      depois, já sobre a branch atualizada.
+   3. Aja sobre a linha de handoff conforme `squad:orquestrar` (`escalate` sobe um degrau,
       `open decision` do usuário vai para o usuário, de orquestração vira ruling).
-   3. Task review no `squad:Reviewer` sobre o diff do commit da task. `ADJUST`/`OBJECT` → fix
-      round no mesmo implementer (resume) com a lista do Reviewer, depois re-review. Rounds 4–5
-      vão para o `squad:Specialist`. Depois do 5º, pare e leve ao usuário.
-   4. Atualize `## Estado`.
+   4. Se a task exige task review (ver acima), rode no `squad:Reviewer` sobre o diff do commit
+      dela. `ADJUST`/`OBJECT` → fix round no mesmo implementer (resume) com a lista do Reviewer,
+      depois re-review, dentro do limite de fix rounds.
+   5. Atualize `## Estado`.
 8. **Verificar.** `squad:QA` sobre a branch inteira: suíte completa, os checks de `checks.md`
    quando existirem, e o browser se mudou UI (Playwright no scratchpad, banco isolado
    `<db>_<slug>`). `FAIL` → fix round no implementer da task dona do arquivo, depois QA de novo só
@@ -100,8 +112,8 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
 10. **Fechar com MR/PR.** Suíte verde e QA `PASS`: commit do `entrega.md`, `git push -u origin
     <branch>` e abra pelo CLI do remote — `glab mr create --target-branch <default>` no GitLab,
     `gh pr create --base <default>` no GitHub. Título Conventional Commits; descrição com o que
-    muda, a verificação (testes, checks, browser), as pendências estacionadas, os rulings e o
-    rodapé de atribuição da sessão. Referência à origem: `Closes #<n>` se a issue é do mesmo
+    muda, a verificação (testes, checks, browser), as pendências estacionadas e os rulings, sem
+    rodapé de atribuição. Referência à origem: `Closes #<n>` se a issue é do mesmo
     projeto, `Closes <grupo/projeto>#<n>` se de outro projeto no mesmo GitLab, ou só o link
     quando é de outro tracker — e então comente o link do MR/PR na issue via `squad:Executor`.
     Nunca merge local nem push na branch padrão. Termine com o link do MR/PR e a lista de rulings.
@@ -115,6 +127,9 @@ varrer `generated/`, `target/`, `node_modules/` ou dumps grandes; descoberta amp
 | Implementar direto do corpo da issue sem trazer para `.specs/` | Passo 2 sempre; a spec fica versionada com o código |
 | Inventar ACs quando a spec não tem critério verificável | Pare e diga o que falta |
 | Duas tasks paralelas no mesmo arquivo | Junte na mesma task ou sequencie |
+| Tasks paralelas commitando no mesmo working tree | `isolation: "worktree"` por task + cherry-pick |
+| Task review em toda task | Só zona de risco ou diff > ~150 linhas; o resto fica para o review final |
+| `Co-Authored-By` ou rodapé de atribuição em commit/MR | Só a mensagem |
 | Verificação de UI só por classe CSS no jsdom | Task de browser no QA |
 | QA usando o banco de dev compartilhado | Banco isolado por feature |
 | QA corrigindo o bug que achou | Ele só reporta; o fix volta ao implementer |

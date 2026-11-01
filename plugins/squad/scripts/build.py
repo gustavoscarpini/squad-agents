@@ -22,11 +22,11 @@ HEADER = "<!-- Gerado por scripts/build.py a partir de src/. Não edite à mão.
 
 SKILL_DESCRIPTION = (
     "Manual de delegação para os seis agentes da squad (Executor, Analyst, Developer, "
-    "Specialist, Reviewer, QA). Use para qualquer busca, mudança, edição em lote, "
+    "Specialist, Reviewer, QA). Use para qualquer investigação, mudança, edição em lote, "
     "pesquisa, review, verificação ou escrita externa (MCP/API/glab) que traria material bruto "
-    "para o contexto principal — inclusive checar se algo existe ou como funciona, mesmo que "
-    "seja um grep só. Não é para conversa simples, para ler um alvo já conhecido cujo conteúdo "
-    "é a própria resposta, nem para uma edição de uma linha já decidida."
+    "para o contexto principal. Não é para conversa simples, para uma checagem pontual de 1–2 "
+    "comandos com saída pequena, para ler um alvo já conhecido cujo conteúdo é a própria "
+    "resposta, nem para uma edição de uma linha já decidida."
 )
 ORCHESTRATOR_DESCRIPTION = (
     "Orquestrador da squad: decide, sequencia, conversa com o usuário e delega para "

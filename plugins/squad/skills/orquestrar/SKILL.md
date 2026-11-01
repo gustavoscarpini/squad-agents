@@ -1,6 +1,6 @@
 ---
 name: orquestrar
-description: "Manual de delegação para os seis agentes da squad (Executor, Analyst, Developer, Specialist, Reviewer, QA). Use para qualquer busca, mudança, edição em lote, pesquisa, review, verificação ou escrita externa (MCP/API/glab) que traria material bruto para o contexto principal — inclusive checar se algo existe ou como funciona, mesmo que seja um grep só. Não é para conversa simples, para ler um alvo já conhecido cujo conteúdo é a própria resposta, nem para uma edição de uma linha já decidida."
+description: "Manual de delegação para os seis agentes da squad (Executor, Analyst, Developer, Specialist, Reviewer, QA). Use para qualquer investigação, mudança, edição em lote, pesquisa, review, verificação ou escrita externa (MCP/API/glab) que traria material bruto para o contexto principal. Não é para conversa simples, para uma checagem pontual de 1–2 comandos com saída pequena, para ler um alvo já conhecido cujo conteúdo é a própria resposta, nem para uma edição de uma linha já decidida."
 ---
 <!-- Gerado por scripts/build.py a partir de src/. Não edite à mão. -->
 
@@ -40,14 +40,22 @@ Qualquer coisa que rode ou escreva em produção ou homologação (banco, servid
 
 ## Delegar vs. fazer você mesmo
 
-Delegue quando o trabalho traria material bruto para o contexto principal: caminhos
-desconhecidos, vários arquivos, um passo com decisões dentro, uma opinião independente que vale
-ter, ou qualquer checagem de se algo existe ou como funciona — "X existe?", "confere a
-implementação", "como Y funciona" é investigação e vai para o Analyst mesmo que acabe sendo um
-grep só. Só não delegue nas exclusões da descrição desta skill: um alvo exato e já conhecido cujo
-conteúdo é a resposta, ou uma edição de uma linha já decidida até o texto exato. Escritas
-externas nunca são feitas direto: quando uma skill entrega um pacote de escrita já decidido,
-mande para o Executor mesmo que a skill descreva as escritas. Na dúvida, delegue.
+Todo agente começa do zero e paga um custo fixo de partida antes de fazer qualquer coisa; só
+delegue quando o que ele poupa ao contexto principal passa disso. Delegue quando o trabalho
+traria material bruto para o contexto principal: caminhos desconhecidos, vários arquivos, um
+passo com decisões dentro, uma opinião independente que vale ter, ou uma investigação que exige
+ler e cruzar mais de um lugar ("como Y funciona", "confere a implementação").
+
+Faça você mesmo:
+
+- uma checagem pontual de 1–2 comandos com saída pequena e previsível — "X existe?", "onde fica
+  a função Z" resolvidos com um `rg -l`/`rg -n` limitado ou um glob; se a saída vier grande ou a
+  resposta exigir ler os arquivos achados, pare e delegue ao Analyst;
+- a leitura de um alvo exato e já conhecido cujo conteúdo é a resposta;
+- uma edição de uma linha já decidida até o texto exato.
+
+Escritas externas nunca são feitas direto: quando uma skill entrega um pacote de escrita já
+decidido, mande para o Executor mesmo que a skill descreva as escritas.
 
 Nunca delegue uma decisão que é do usuário: mantenha com você e diga aos agentes que devolvam
 perguntas não resolvidas com opções e custos em vez de chutar ou falar com o usuário direto.
@@ -151,7 +159,8 @@ já tomada e não redelegue trabalho já devolvido corretamente.
 
 - **Claude Code**: ferramenta `Agent` com `subagent_type: "squad:<Nome>"` (ex.:
   `squad:Developer`). O modelo e o esforço vêm do papel — não passe `model` a menos que haja
-  motivo explícito. Subagentes rodam em background por padrão; passe `run_in_background` só se o
+  motivo explícito. Exceção: Analyst para localizar algo (onde fica, quem chama, lista de
+  ocorrências) sem síntese vai com `model: "haiku"`. Subagentes rodam em background por padrão; passe `run_in_background` só se o
   schema da ferramenta expuser. Use `SendMessage` para pedir status ou corrigir o rumo, não a
   ferramenta `Monitor`.
 - **Backend OpenCode (opcional)**: quando o usuário pedir para mandar um papel para o OpenCode,

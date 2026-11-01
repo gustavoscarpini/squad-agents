@@ -40,14 +40,22 @@ Qualquer coisa que rode ou escreva em produção ou homologação (banco, servid
 
 ## Delegar vs. fazer você mesmo
 
-Delegue quando o trabalho traria material bruto para o contexto principal: caminhos
-desconhecidos, vários arquivos, um passo com decisões dentro, uma opinião independente que vale
-ter, ou qualquer checagem de se algo existe ou como funciona — "X existe?", "confere a
-implementação", "como Y funciona" é investigação e vai para o Analyst mesmo que acabe sendo um
-grep só. Só não delegue nas exclusões da descrição desta skill: um alvo exato e já conhecido cujo
-conteúdo é a resposta, ou uma edição de uma linha já decidida até o texto exato. Escritas
-externas nunca são feitas direto: quando uma skill entrega um pacote de escrita já decidido,
-mande para o Executor mesmo que a skill descreva as escritas. Na dúvida, delegue.
+Todo agente começa do zero e paga um custo fixo de partida antes de fazer qualquer coisa; só
+delegue quando o que ele poupa ao contexto principal passa disso. Delegue quando o trabalho
+traria material bruto para o contexto principal: caminhos desconhecidos, vários arquivos, um
+passo com decisões dentro, uma opinião independente que vale ter, ou uma investigação que exige
+ler e cruzar mais de um lugar ("como Y funciona", "confere a implementação").
+
+Faça você mesmo:
+
+- uma checagem pontual de 1–2 comandos com saída pequena e previsível — "X existe?", "onde fica
+  a função Z" resolvidos com um `rg -l`/`rg -n` limitado ou um glob; se a saída vier grande ou a
+  resposta exigir ler os arquivos achados, pare e delegue ao Analyst;
+- a leitura de um alvo exato e já conhecido cujo conteúdo é a resposta;
+- uma edição de uma linha já decidida até o texto exato.
+
+Escritas externas nunca são feitas direto: quando uma skill entrega um pacote de escrita já
+decidido, mande para o Executor mesmo que a skill descreva as escritas.
 
 Nunca delegue uma decisão que é do usuário: mantenha com você e diga aos agentes que devolvam
 perguntas não resolvidas com opções e custos em vez de chutar ou falar com o usuário direto.
