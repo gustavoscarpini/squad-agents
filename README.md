@@ -11,14 +11,14 @@ orquestra (decide, sequencia, conversa com você) e os agentes fazem o trabalho.
 Os nomes descrevem a função, não o cargo. A ordem é de julgamento: Executor → Developer →
 Specialist é a escada de escalonamento. Você é o PO: produto, prioridade, dinheiro e produção são decisões suas.
 
-| Agente | No aiwkf | Quando usar | Claude | OpenCode |
-|---|---|---|---|---|
-| Executor | Operator | Mudança já decidida até o último detalhe, inclusive escritas MCP/API/`glab` | haiku | deepseek-v4.1-flash |
-| Analyst | Researcher | Investigação somente leitura de qualquer fonte | sonnet / medium | gpt-6-sol |
-| Developer | Builder | Implementação com escopo, decisões pequenas, sem padrão novo | sonnet / medium | gpt-6-sol |
-| Specialist | Specialist | Transversal, sem padrão, ou zona de risco (migration, dinheiro, auth, concorrência, agenda, LGPD) | opus / high | gpt-6-astra |
-| Reviewer | Reviewer | Validar plano, diff, texto ou decisão antes de seguir | opus / high | gpt-6-astra |
-| QA | — | Rodar testes/build/browser em ambiente isolado e só reportar | sonnet / medium | gpt-6-sol |
+| Agente | No aiwkf | Quando usar | Claude | OpenCode | Worker Orca |
+|---|---|---|---|---|---|
+| Executor | Operator | Mudança já decidida até o último detalhe, inclusive escritas MCP/API/`glab` | haiku | deepseek-flash | opencode · deepseek-flash |
+| Analyst | Researcher | Investigação somente leitura de qualquer fonte | sonnet / medium | gpt-6-sol | opencode · deepseek-v4-pro |
+| Developer | Builder | Implementação com escopo, decisões pequenas, sem padrão novo | sonnet / medium | gpt-6-sol | — |
+| Specialist | Specialist | Transversal, sem padrão, ou zona de risco (migration, dinheiro, auth, concorrência, agenda, LGPD) | opus / high | gpt-6-astra | — |
+| Reviewer | Reviewer | Validar plano, diff, texto ou decisão antes de seguir | opus / high | gpt-6-astra | — |
+| QA | — | Rodar testes/build/browser em ambiente isolado e só reportar | sonnet / medium | gpt-6-sol | opencode · deepseek-v4-pro |
 
 ```mermaid
 flowchart LR
@@ -59,10 +59,32 @@ plugins/squad/
   scripts/build.py        gera tudo; --check confere
   scripts/test.sh         paridade de nomes, manifests, gerados em dia
   scripts/install-opencode.sh
+  scripts/orca-dispatch.sh  dispara um papel como worker do Orca
 ```
 
 Para mudar algo: edite `src/`, rode `python3 plugins/squad/scripts/build.py` e depois
 `bash plugins/squad/scripts/test.sh`.
+
+## Rodando no Orca
+
+Numa sessão Claude Code aberta pelo [Orca](https://www.onorca.dev/docs), a skill `orquestrar`
+mistura Claude e DeepSeek: os papéis com rota `orca` em `src/roles.json` (hoje Executor, Analyst
+e QA) vão como worker supervisionado do Orca no OpenCode com DeepSeek, e os demais seguem como
+subagente nativo do Claude.
+
+O disparo é `scripts/orca-dispatch.sh <Papel> <prompt.md>`. Ele monta o spec com o corpo do
+papel mais o bloco de delegação e chama
+`orca orchestration worker-start --worktree current --agent opencode --model <modelo>`. O
+coordenador encerra o turno e o Orca o acorda com o `worker_done`. Se a sessão não estiver no
+Orca, ou o OpenCode ou o modelo não estiverem disponíveis, o script sai com 3 e o papel roda como
+subagente nativo.
+
+Pré-requisitos: OpenCode instalado e autenticado no provider da rota (`opencode auth login`) e o
+modelo aparecendo em `opencode models`. Para trocar o modelo ou mover um papel, edite o campo
+`orca` em `src/roles.json` e rode o build.
+
+O worker sobe no agente padrão do OpenCode, sem as permissões do perfil da squad. Analyst e QA
+continuam somente leitura só pelo prompt, e o coordenador confere o `git status` antes e depois.
 
 ## Entregar uma spec
 

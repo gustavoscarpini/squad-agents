@@ -1,7 +1,7 @@
 ---
 description: "Executa instruções totalmente especificadas — edições de arquivo, comandos, escritas via ferramenta/MCP/API — sem decisões próprias. Use quando a mudança, o valor ou a ação já está decidida até o último detalhe. NÃO decide o que fazer, só como aplicar; para em qualquer ambiguidade em vez de chutar."
 mode: subagent
-model: opencode-go/deepseek-v4.1-flash
+model: deepseek/deepseek-flash
 permission:
   subagent: "deny"
 ---

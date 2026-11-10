@@ -73,9 +73,24 @@ def frontmatter(fields):
     return "\n".join(lines) + "\n"
 
 
+def orca_routes(roles):
+    """Tabela papel → agente/modelo do worker Orca, gerada a partir de roles.json."""
+    rows = ["| Papel | Worker Orca |", "|---|---|"]
+    for name, meta in roles.items():
+        orca = meta.get("orca")
+        if orca:
+            if not (orca.get("agent") and orca.get("model")):
+                sys.exit(f"rota orca de {name} precisa de agent e model")
+            rows.append(f"| {name} | `{orca['agent']}` · `{orca['model']}` |")
+        else:
+            rows.append(f"| {name} | — (subagente nativo) |")
+    return "\n".join(rows) + "\n"
+
+
 def outputs():
     roles = json.loads((SRC / "roles.json").read_text())
     partials = {p.stem: p.read_text() for p in (SRC / "partials").glob("*.md")}
+    partials["orca_rotas"] = orca_routes(roles)
     out = {}
 
     for name, meta in roles.items():

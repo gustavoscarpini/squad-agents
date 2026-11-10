@@ -50,6 +50,14 @@ if not (roles == claude == set(table)) or not (lower == opencode == src_bodies):
         f"  src/roles/: {sorted(src_bodies)}"
     )
 
+raw = json.loads((plugin / "src/roles.json").read_text())
+for name, meta in raw.items():
+    orca = meta.get("orca")
+    if orca is not None and not (orca.get("agent") and orca.get("model")):
+        sys.exit(f"roles.json: rota orca de {name} sem agent/model")
+    if orca and f"| {name} | `{orca['agent']}` · `{orca['model']}` |" not in skill:
+        sys.exit(f"skill sem a rota orca de {name}")
+
 for p in (plugin / "opencode/agents").glob("*.md"):
     mode = fm(p).get("mode")
     expected = "primary" if p.stem == "lead" else "subagent"
@@ -68,8 +76,10 @@ if mp["metadata"]["version"] != manifest["version"]:
 PY
 echo "PASS: papéis e manifests"
 
-bash -n "${HERE}/test.sh" "${HERE}/install-opencode.sh" || fail "bash -n"
+for s in test.sh install-opencode.sh orca-dispatch.sh; do
+  bash -n "${HERE}/${s}" || fail "bash -n ${s}"
+done
 if command -v shellcheck >/dev/null 2>&1; then
-  shellcheck "${HERE}/test.sh" "${HERE}/install-opencode.sh" || fail "shellcheck"
+  shellcheck "${HERE}/test.sh" "${HERE}/install-opencode.sh" "${HERE}/orca-dispatch.sh" || fail "shellcheck"
 fi
 echo "ALL PASS"

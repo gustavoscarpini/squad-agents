@@ -171,6 +171,32 @@ já tomada e não redelegue trabalho já devolvido corretamente.
   --short` e `git rev-parse HEAD` antes. Ao terminar, trate a linha de handoff do log como
   alegação, não prova: leia o diff inteiro e mande ao Reviewer (e ao QA quando houver
   critério executável) antes de aceitar.
+
+### Rodando dentro do Orca
+
+Quando a sessão roda no Orca (`ORCA_CLI_COMMAND` definido), os papéis com rota abaixo vão como
+worker supervisionado do Orca, no agente e modelo da rota; os demais seguem como subagente
+nativo.
+
+{{orca_rotas}}
+
+- Escreva o bloco de delegação num arquivo do scratchpad e rode, a partir da raiz do
+  repositório, `bash <diretório desta skill>/../../scripts/orca-dispatch.sh <Papel> <arquivo>
+  --title "<papel>: <tarefa curta>"`. O script monta o spec com o corpo do papel e dispara
+  `orca orchestration worker-start --worktree current`. Depois **encerre o turno**: o Orca te
+  acorda com o `worker_done` (ou com um `ask`, que você responde com `orchestration reply`).
+  Nunca faça polling nem leia o terminal do worker.
+- Saída 3 do script = sem rota utilizável (fora do Orca, CLI ou modelo indisponível): use o
+  subagente nativo do papel sem perguntar. Qualquer outra falha: não rode de novo; leia
+  `failedStage` no recibo e leve ao usuário se não for questão de orquestração.
+- O corpo do `worker_done` é o relatório do papel e termina na linha de handoff (ou no
+  `RESULT:` do QA); aja sobre ela como em qualquer delegação.
+- O worker roda no agente padrão do CLI, sem as permissões do perfil da squad. Para Analyst e
+  QA, que não editam, o script imprime o `git status` de antes; compare com o de depois e trate
+  qualquer arquivo alterado por eles como `not done`.
+- Workers dividem a worktree atual: a regra de Concorrência vale igual. Dois escritores em
+  paralelo só com `--worktree new-child` no script, em vez da worktree atual, e isso exige juntar a
+  branch depois — leve ao usuário antes.
 <!-- /claude -->
 <!-- opencode -->
 - **OpenCode**: inicie os papéis pela ferramenta de subagente com o nome em minúsculas
