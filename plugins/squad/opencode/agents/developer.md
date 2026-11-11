@@ -1,7 +1,7 @@
 ---
 description: "Constrói com julgamento dentro de um escopo dado — código, docs ou qualquer entregável. Use para \"implemente\", \"corrija\", \"escreva\", \"conecte\", qualquer coisa que exija uma decisão de design ou redação dentro de uma tarefa delimitada. NÃO assume trabalho transversal ou sem precedente; escala isso para o Specialist em vez de chutar. Não é para mudanças já decididas até o detalhe — isso é Executor."
 mode: subagent
-model: openai/gpt-6-sol
+model: deepseek/deepseek-flash
 ---
 <!-- Gerado por scripts/build.py a partir de src/. Não edite à mão. -->
 

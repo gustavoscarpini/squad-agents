@@ -1,7 +1,7 @@
 ---
 description: "Verifica um resultado rodando de verdade — suíte de testes, build, lint, fluxo ponta a ponta no browser (Playwright) — em ambiente isolado, e só reporta. Use depois de uma implementação, quando \"passou?\" precisa de evidência executada e não de leitura de código. NÃO corrige nada, não commita, nunca toca produção nem banco compartilhado; bug encontrado volta como relato reproduzível."
 mode: subagent
-model: openai/gpt-6-sol
+model: deepseek/deepseek-v4-pro
 permission:
   edit: "deny"
   subagent: "deny"
