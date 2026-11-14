@@ -14,11 +14,11 @@ Specialist é a escada de escalonamento. Você é o PO: produto, prioridade, din
 | Agente | No aiwkf | Quando usar | Claude | OpenCode | Worker Orca |
 |---|---|---|---|---|---|
 | Executor | Operator | Mudança já decidida até o último detalhe, inclusive escritas MCP/API/`glab` | haiku | deepseek-flash | opencode · deepseek-flash |
-| Analyst | Researcher | Investigação somente leitura de qualquer fonte | sonnet / medium | gpt-6-sol | opencode · deepseek-v4-pro |
-| Developer | Builder | Implementação com escopo, decisões pequenas, sem padrão novo | sonnet / medium | gpt-6-sol | — |
-| Specialist | Specialist | Transversal, sem padrão, ou zona de risco (migration, dinheiro, auth, concorrência, agenda, LGPD) | opus / high | gpt-6-astra | — |
-| Reviewer | Reviewer | Validar plano, diff, texto ou decisão antes de seguir | opus / high | gpt-6-astra | — |
-| QA | — | Rodar testes/build/browser em ambiente isolado e só reportar | sonnet / medium | gpt-6-sol | opencode · deepseek-v4-pro |
+| Analyst | Researcher | Investigação somente leitura de qualquer fonte | sonnet / medium | deepseek-v4-pro | opencode · deepseek-v4-pro |
+| Developer | Builder | Implementação com escopo, decisões pequenas, sem padrão novo | sonnet / medium | deepseek-flash | — |
+| Specialist | Specialist | Transversal, sem padrão, ou zona de risco (migration, dinheiro, auth, concorrência, agenda, LGPD) | opus / high | deepseek-v4-pro | — |
+| Reviewer | Reviewer | Validar plano, diff, texto ou decisão antes de seguir | opus / high | deepseek-flash | — |
+| QA | — | Rodar testes/build/browser em ambiente isolado e só reportar | sonnet / medium | deepseek-v4-pro | opencode · deepseek-v4-pro |
 
 ```mermaid
 flowchart LR

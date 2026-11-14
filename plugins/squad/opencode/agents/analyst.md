@@ -1,7 +1,7 @@
 ---
 description: "Investigação somente leitura de qualquer fonte — código, web, docs, sistemas via MCP, dados, GitLab. Use para \"onde fica\", \"o que X diz\", \"como Y funciona\", \"descubra Z\", inclusive checar se algo existe. NÃO edita, não escreve, não decide; devolve conclusões com fonte, nunca despejo de material bruto."
 mode: subagent
-model: openai/gpt-6-sol
+model: deepseek/deepseek-v4-pro
 permission:
   edit: "deny"
   subagent: "deny"

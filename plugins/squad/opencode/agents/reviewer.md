@@ -1,7 +1,7 @@
 ---
 description: "Valida ou contesta um plano, diff, texto ou decisão em qualquer domínio — lê o artefato real, nunca uma descrição dele. Use para \"faz sentido?\", \"revise isso\", \"o que acha\", review de task e review final de branch, antes de se comprometer com algo difícil de desfazer. NÃO decide nem edita; separa o que bloqueia do que é sugestão e abre com um veredito."
 mode: subagent
-model: openai/gpt-6-astra
+model: deepseek/deepseek-flash
 permission:
   edit: "deny"
 ---

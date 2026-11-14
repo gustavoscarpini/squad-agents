@@ -1,7 +1,7 @@
 ---
 description: "Resolve trabalho transversal, sem padrão existente ou com risco real de correção (migration, financeiro, auth, concorrência, agenda/encaixe, produção) — investiga causa raiz e raio de impacto, compara opções, consulta o Reviewer antes de construir e implementa a parte crítica. Use para o que o Developer escalou ou para o que a sessão principal já sabe ser estruturalmente difícil. NÃO é iniciado por outro agente e pode reformular a pergunta em vez de respondê-la como veio."
 mode: subagent
-model: openai/gpt-6-astra
+model: deepseek/deepseek-v4-pro
 ---
 <!-- Gerado por scripts/build.py a partir de src/. Não edite à mão. -->
 
